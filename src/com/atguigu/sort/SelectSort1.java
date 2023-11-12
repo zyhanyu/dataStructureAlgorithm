@@ -1,19 +1,32 @@
-package stack;
+package com.atguigu.sort;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 public class SelectSort1 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int[] arr = {101, 34, 119, 1,-1,90,123};
-		System.out.println("排序前");
-		System.out.println(Arrays.toString(arr));
-		
-		selectSort(arr);
 
-		System.out.println("排序后");
-		System.out.println(Arrays.toString(arr));
+		int[] arr = new int[80000];
+		for (int i = 0; i < 80000; i++) {
+			arr[i] = (int)(Math.random() * 8000000);//生成一个[0, 8000000] 数
+		}
+		
+		Date data1 = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date1Str = simpleDateFormat.format(data1);
+		System.out.println("排序前的时间时=" + date1Str);
+		
+		
+		// 测试冒泡排序
+		selectSort(arr);
+		
+		Date data2 = new Date();
+		String date2Str = simpleDateFormat.format(data2);
+		System.out.println("排序后的时间时=" + date2Str);
+		
 		
 
 	}
