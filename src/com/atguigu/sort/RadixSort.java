@@ -1,13 +1,27 @@
 package com.atguigu.sort;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 public class RadixSort {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int arr[] = {53,3,542,748,14,214};
+		int[] arr = new int[80000];
+		for (int i = 0; i < 80000; i++) {
+			arr[i] = (int)(Math.random() * 8000000);//生成一个[0, 8000000] 数
+		}
+		
+		Date data1 = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date1Str = simpleDateFormat.format(data1);
+		System.out.println("排序前的时间时=" + date1Str);
 		radixSort(arr);
+		
+		Date data2 = new Date();
+		String date2Str = simpleDateFormat.format(data2);
+		System.out.println("排序后的时间时=" + date2Str);
 	}
 	
 	// 基数排序方法
@@ -62,7 +76,7 @@ public class RadixSort {
 				// 第一轮处理后，需要将每个bucketElementCounts[k] = 0 !!!
 				bucketElementCounts[k] = 0;
 			}
-			System.out.println("第"+(i+1)+"论，对个位的排序 arr = "+Arrays.toString(arr));
+			// System.out.println("第"+(i+1)+"论，对个位的排序 arr = "+Arrays.toString(arr));
 		}
 //		
 //		for(int j = 0; j < arr.length; j++){
