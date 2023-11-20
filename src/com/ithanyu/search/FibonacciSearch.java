@@ -41,10 +41,10 @@ public class FibonacciSearch {
 		while(high > f[k] - 1){
 			k++;
 		}
-		// 因为 f[k] 值 可能大于 a 的长度，因此我们需要使用Arrays类，构造一个新的数组，并指向a[]
+		// 因为 f[k] 值 可能大于 a 的长度，因此我们需要使用Arrays类，构造一个新的数组，并指向temp[]
 		int[] temp = Arrays.copyOf(a, f[k]);
 		// 实际上需求使用a数组最后的数填充 temp
-		// temp = {1,8,10,89,1000,1234,0,0,0} =>{1,8,10,89,1000,1234,01234,1234,1234}
+		// temp = {1,8,10,89,1000,1234,,0} =>{1,8,10,89,1000,1234,1234,1234}
 		for (int i = high + 1; i < temp.length; i++) {
 			temp[i] = a[high];
 		}
