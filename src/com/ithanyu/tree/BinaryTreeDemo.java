@@ -58,6 +58,13 @@ public class BinaryTreeDemo {
 			System.out.printf("没有找到 no = %d 的英雄",5);
 		}
 		
+		// 测试一把删除节点
+		System.out.println("删除前，前序遍历");
+		binaryTree.preOrder();
+		binaryTree.delNode(5);
+		System.out.println("删除后，前序遍历");
+		binaryTree.preOrder();
+		
 	}
 
 }
@@ -68,6 +75,20 @@ class BinaryTree{
 
 	public void setRoot(HeroNode root) {
 		this.root = root;
+	}
+	
+	// 删除节点
+	public void delNode(int no){
+		if (root != null) {
+			// 如果是由root 一个节点，判断root是不是要删除的节点
+			if (root.getNo() == no) {
+				root = null;
+			}else{
+				root.delNode(no);
+			}
+		}else{
+			System.out.println("这是一个空树不能删除");
+		}
 	}
 	
 	// 前序遍历
@@ -160,6 +181,26 @@ class HeroNode{
 	@Override
 	public String toString() {
 		return "HeroNode [no=" + no + ", name=" + name + "]";
+	}
+	
+	// 递归删除节点
+	// 1. 如果删除的节点是叶子节点，则删除该节点
+	// 2. 如果删除的节点是非叶子节点，则删除该子树
+	public void delNode(int no){
+		if (this.left != null && this.left.no == no) {
+			this.left = null;
+			return;
+		}
+		if (this.right != null && this.right.no == no) {
+			this.right = null;
+			return;
+		}
+		if (this.left != null) {
+			this.left.delNode(no);
+		}
+		if (this.right != null) {
+			this.right.delNode(no);
+		}
 	}
 	// 编写前序遍历的方法
 	public void preOrder(){
