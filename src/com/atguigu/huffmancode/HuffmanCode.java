@@ -20,6 +20,11 @@ public class HuffmanCode {
 		byte[] huffmanCodesBytes = huffmanZip(contentBytes);
 		System.out.println("压缩后的结果是：" + Arrays.toString(huffmanCodesBytes) + " 长度= " + huffmanCodesBytes.length);
 		
+		// 测试 byteToBitString
+		// System.out.println(byteToBitString((byte)1));
+		byte[] soutceBytes = decode(huffmanCodes, huffmanCodesBytes);
+		System.out.println("原来的字符串 = " + new String(soutceBytes));
+		
 		// 分布过程
 		/*
 		List<Node> nodes = getNodes(contentBytes);
@@ -45,6 +50,100 @@ public class HuffmanCode {
 		
 		
 	}
+	
+	// 完成数据的解压
+	// 思路
+	// 1. 将huffmanCodeBytes [-88, -65, -56, -65, -56, -65, -55, 77, -57, 6, -24, -14, -117, -4, -60, -90, 28] 长度= 17
+	//    重写先转成 哈夫曼编码对应的二进制的字符串 "1010100010111..."
+	// 2. 哈夫曼编码对应的二进制的字符串 "1010100010111..." => 对照 哈夫曼编码 => "i like like like java do you like a java"
+	
+	// 编写一个方法，完成对压缩数据的解码
+	/**
+	 * 
+	 * @param huffmanCodes 哈夫曼编码表 map
+	 * @param huffmanBytes 哈夫曼编码得到的字节数组
+	 * @return 就是原来的字符串对应的数组
+	 */
+	private static byte[] decode(Map<Byte, String> huffmanCodes,byte[] huffmanBytes){
+		
+		// 1. 先得到 hufmanBytes 对应的二进制的字符串，形式 1010100010111...
+		StringBuffer stringBuilder = new StringBuffer();
+		// 将byte数组转成二进制的字符串
+		for (int i = 0; i < huffmanBytes.length; i++) {
+			byte b =huffmanBytes[i];
+			// 判断是不是最后一个字符串
+			boolean flag = (i == huffmanBytes.length - 1);
+			stringBuilder.append(byteToBitString(!flag, b));
+		}
+		// System.out.println("哈夫曼字节数组对应的二进制字符串="+ stringBuilder.toString());
+		// return null;
+		// 把字符串按照指定的哈夫曼进行解码
+		// 把哈夫曼编码表进行调换，因为反向查询 a->100 100->a
+		Map<String, Byte> map = new HashMap<String,Byte>();
+		for(Map.Entry<Byte, String> entry:huffmanCodes.entrySet()){
+			map.put(entry.getValue(), entry.getKey());
+		}
+		System.out.println("map"+map);
+		
+		// 创建要给集合，存放byte
+		List<Byte> list = new ArrayList<>();
+		// i 可以理解成索引，扫描 stringBuilder	
+		for (int i = 0; i < stringBuilder.length(); ) {
+			int count = 1; // 小的计算器
+			boolean flag = true;
+			Byte b = null;
+			
+			while(flag){
+				// 1010100010111...
+				// 递增的取出key
+				String key = stringBuilder.substring(i,i+count);// i 不动，让count移动，指定匹配到一个字符
+				b = map.get(key);
+				if (b == null) {//说明没有匹配到
+					count++;
+				}else{
+					// 匹配到
+					flag = false;
+				}
+				
+			}
+			list.add(b);
+			i += count;// i 直接移动到 count
+		}
+		// 当for循环结束后，我们list中就存放了所有的字符
+		// 把list 中的数据放入到byte[], 并返回
+		byte b[] = new byte[list.size()];
+		for (int i = 0; i < b.length; i++) {
+			b[i] = list.get(i);
+		}
+		return b;
+		
+	}
+	
+	/**
+	 * 将一个byte 转成一个二进制的字符串
+	 * @param flag 标志是否需要补高位如果是true，表示需要补高位，如果是false表示不补，如果是最后一个字节，无需补高位
+	 * @param b  传入的byte
+	 * @return 是该b 对应的二进制的字符串，(注意是按补码返回)
+	 */
+	private static String byteToBitString(boolean flag,byte b) {
+		// 使用变量保存 b
+		int temp = b; // 将b转成int
+		// 如果是正数我们还存在补高位
+		if (flag) {
+			temp |= 256; // 按位与256 1 0000 0000 | 0000 0001 => 1 0000 0001
+
+		}
+		
+		String str = Integer.toBinaryString(temp); // 返回的是temp对应的二进制的补码
+		// System.out.println("str="+str);
+
+		if (flag) {
+			return str.substring(str.length() - 8);
+		}else{
+			return str;
+		}
+	}
+	
 	
 	// 使用一个方法，将前面的方法封装起来，便于我们的调用。
 	/**
