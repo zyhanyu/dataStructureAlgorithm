@@ -1,6 +1,6 @@
 package com.ithanyu.tree.threadedbinarytree;
 
-import com.atguigu.sort.test;
+import com.ithanyu.sort.test;
 
 public class ThrededBinaryTreeDemo {
 
